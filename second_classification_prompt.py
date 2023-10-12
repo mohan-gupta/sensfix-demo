@@ -1,13 +1,17 @@
+#second_classification_prompt.py
 from langchain import PromptTemplate
 
 def get_second_classification_prompt():
     second_classification_prompt = PromptTemplate(
-        input_variables=["user_complain"],
+        input_variables=["user_input"],
         template="""
-    Classify the complaint into one of the following categories (Electrical), (IT), (Cleaning), (Janitorial),  (Building), (Infrastructure), (Security), (Not Enough Information) using the examples below. 
-    If there is not enough information, respond with 'Not enough information'.
+ Classify the complaint into "Electrical" or "IT", "Cleaning" or "Janitorial", "Building" or "Infrastructure", or "Security"  using the examples below. 
 
-    Examples:
+Give your response in the format below:
+
+<complaint classification>
+
+Examples:
 
 Electrical:
 The lights are flickering.
@@ -85,16 +89,8 @@ The train tracks are damaged.
 The airport runway is cracked.
 The harbor is polluted.
 
-Security:
-"There has been a security breach in the office."
-"Someone has been vandalizing the property."
-"There have been reports of theft in the building."
 
-Not enough information:
-"The service is terrible."
-"Something is not working."
-
-Complaint: {user_complain}
+Complaint: {user_input}
     """
 )
 
