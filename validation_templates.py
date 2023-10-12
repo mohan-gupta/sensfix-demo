@@ -1,13 +1,16 @@
+#validation_templates.py
 from langchain import PromptTemplate
 
 validation_prompt = PromptTemplate(
-  input_variables=["user_complain"],
+  input_variables=["user_input"],
   template="""
-  Classify the block of text into "complete complaint" or "incomplete complaint" using only the examples below. Respond in English/Korean/Spanish:
+  Classify the block of text into "complete complaint" or "incomplete complaint" using the examples below. Give your response in the format below:
 
-  Examples:
+ [complaint classification]
 
-  Complete complaints:
+ Examples:
+
+  Complete complaint:
   "The pump in the machine room is not working. It is making a loud noise and leaking water."
   "The air conditioning system in the office is not working properly. It is too hot and stuffy." 
   "The fire alarm system in the building is not working. It is not beeping when there is a fire."
@@ -15,18 +18,13 @@ validation_prompt = PromptTemplate(
   "The water heater in the break room is not working. The water is not getting hot."
   "The elevator in the west wing is frequently getting stuck between floors with people inside."
   "The lights in the hallway keep flickering and some bulbs have burnt out."
+  "The toilet sink is messy"
 
-  Incomplete complaints: 
-  "The pump is not working."
-  "The air conditioning is not working."
-  "The fire alarm is not working."
-  "The security system is not working."
-  "The water heater is not working."
-  "The elevator is not working."
-  "The lights are not working."
+  Incomplete complaint: 
   "Hi, My name is Mike."
   "Hello there!"
+  "I am feeling sad"
 
-  Block of text: {user_complain}
+  Block of text: {user_input}
   """
 )
