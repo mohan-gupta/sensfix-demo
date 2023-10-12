@@ -1,5 +1,4 @@
 # dependencies.py
-# dependencies.py
 
 from fastapi import FastAPI
 from langchain import OpenAI, LLMChain
