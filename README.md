@@ -1,6 +1,6 @@
-# FastAPI Language Model Integration
+# FastAPI Language Model Integration with MongoDB
 
-This project demonstrates the integration of a language model using FastAPI. It allows you to classify user complaints, generate responses, and qualify text as a valid ticket or not using OpenAI's language model.
+This project demonstrates the integration of a language model using FastAPI, with the addition of Reinforcement Learning (RL) for dynamic prompts and example storage using the RAG (Retrieval-Augmented Generation) algorithm, powered by MongoDB for prompt and example management. This extended functionality enables you to classify user complaints, generate responses, and qualify text as a valid ticket with a more dynamic and adaptable approach.
 
 ## Project Structure
 
@@ -11,6 +11,7 @@ The project is organized into several files and directories:
 - `categorize_templates.py`: Stores the `PromptTemplate` for classifying complaints.
 - `response_templates.py`: Stores the `PromptTemplate` for generating responses to user complaints.
 - `ticket_templates.py`: Stores the `PromptTemplate` for qualifying text as a valid ticket.
+- `rl_prompt_manager.py`: Manages dynamic prompts and examples using the RAG algorithm and MongoDB.
 
 ## How to Run
 
@@ -45,17 +46,23 @@ The project is organized into several files and directories:
    OPENAI_API_KEY=your_api_key_here
    ```
 
-6. Run the FastAPI application:
+6. Configure your MongoDB connection details in the `.env` file, such as:
+
+   ```
+   MONGODB_URI=your_mongodb_uri_here
+   ```
+
+7. Run the FastAPI application:
 
    ```bash
    uvicorn main:app --reload
    ```
 
-7. Access the API in your web browser or use a tool like `curl` or `httpie` to make HTTP requests.
+8. Access the API in your web browser or use a tool like `curl` or `httpie` to make HTTP requests.
 
 ## API Endpoints
 
-- `/ticket_qualification`: Classifies user input as a valid ticket or not, generates responses, and categorizes the complaints into specific categories.
+- `/ticket_qualification`: Classifies user input as a valid ticket or not, generates responses, and categorizes the complaints into specific categories using dynamic prompts managed by the RAG algorithm and MongoDB.
 
 ## Multilingual Support
 
@@ -93,6 +100,7 @@ Contributions are welcome! Feel free to open issues or submit pull requests to i
 
 - [FastAPI](https://fastapi.tiangolo.com/): A modern, fast (high-performance), web framework for building APIs with Python.
 - [OpenAI](https://beta.openai.com/): GPT-3.5-based language model used for natural language processing.
+- [MongoDB](https://www.mongodb.com/): A flexible, open-source, document-oriented NoSQL database used for dynamic prompt and example storage with the RAG algorithm.
 
 ---
 
