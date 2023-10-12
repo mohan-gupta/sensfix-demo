@@ -1,4 +1,5 @@
-# response_templates.py
+#ticket_templates.py
+# ticket_templates.py
 
 from langchain import PromptTemplate
 
@@ -6,9 +7,8 @@ from langchain import PromptTemplate
 ticket_prompt = PromptTemplate(
   input_variables=["user_input"],
   template="""
-    Classify the below block of text as either a valid ticket or not a ticket, using the examples as a guide.
-    Respond in English/Korean/Spanish:
-    
+Classify the below block of text as either "ticket" or "not a ticket" using the examples below:
+
     Examples:
     
     The elevator is not working. (Ticket)  
@@ -34,7 +34,6 @@ ticket_prompt = PromptTemplate(
     I think the price is too high. (Not a ticket)
     I am not satisfied with the product I received. (Not a ticket)
     
-    Block of text:
-    {user_input}
+    Block of text: {user_input}
   """
 )
