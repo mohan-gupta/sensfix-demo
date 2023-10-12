@@ -1,14 +1,14 @@
 # response_templates.py
+# response_templates.py
 
 from langchain import PromptTemplate
 
-# Response generation prompt
 response_prompt = PromptTemplate(
-  input_variables=["user_complaint"],
+  input_variables=["user_input"],
   template="""
-    Create a resolution for a user complaint using the examples below, If there is not enough information to classify, respond with 'Not enough information'. 
-    Respond in English/Korean/Spanish:
-    
+    Generate a resolution for a user complaint using the examples below:
+
+
     Examples:
 
     Complaint: The roof is leaking.
@@ -41,6 +41,6 @@ response_prompt = PromptTemplate(
     Complaint: The fire alarm is not working.
     Response: This is a major concern, thank you for bringing it to my attention. I will send someone to inspect the fire alarm system immediately and make any repairs needed to get it fully operational. Please let me know if any other issues arise.
 
-    Resolving Complaint: {user_complaint}
+   Complaint: {user_input}
   """
 )
