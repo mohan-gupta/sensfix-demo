@@ -27,7 +27,7 @@ class Complaint2(BaseModel):
 @router.post("/complaint_is_complete")
 async def is_complete_complaint(cmp: Complaint):
     correct_class = cmp.correct_classification.lower()
-    valid_comp_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
+    valid_comp_collection.update_one({"cmp_id":1}, {"$push": {correct_class: cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
@@ -36,7 +36,7 @@ async def is_complete_complaint(cmp: Complaint):
 @router.post("/complaint_l1_type")
 async def classify_complaint(cmp: Complaint):
     correct_class = cmp.correct_classification.lower()
-    category_l1_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
+    category_l1_collection.update_one({"cmp_id":1}, {"$push": {correct_class: cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
@@ -45,7 +45,7 @@ async def classify_complaint(cmp: Complaint):
 @router.post("/complaint_l2_type")
 async def classify_complaint2(cmp: Complaint2):
     correct_class = cmp.correct_classification.lower()
-    category_l2_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
+    category_l2_collection.update_one({"cmp_id":1}, {"$push": {correct_class: cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
@@ -55,7 +55,7 @@ async def classify_complaint2(cmp: Complaint2):
 @router.post("/complaint_response")
 async def complaint_response(cmp: Complaint2):
     correct_class = cmp.correct_classification.lower()
-    response_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
+    response_collection.update_one({"cmp_id":1}, {"$push": {correct_class: cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
@@ -65,7 +65,7 @@ async def complaint_response(cmp: Complaint2):
 @router.post("/ticket_clf")
 async def classify_ticket(cmp: Complaint):
     correct_class = cmp.correct_classification.lower()
-    ticket_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
+    ticket_collection.update_one({"cmp_id":1}, {"$push": {correct_class: cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
