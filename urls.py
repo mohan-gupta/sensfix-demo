@@ -1,73 +1,55 @@
-from fastapi import FastAPI, APIRouter
-from pydantic import BaseModel
+from fastapi import APIRouter
 
-from dependencies import response_chain
+from langchain import LLMChain
 
-from mongo_conn import db
+from dependencies import llm1, llm2, llm3
 
-ticket_collection = db["ticket"]
-response_collection = db["response"]
-category_l1_collection = db["category_l1"]
-category_l2_collection = db["category_l2"]
-valid_comp_collection = db["valid_complaint"]
+from prompts import (
+    validation_prompt,
+    category_l1_prompt,
+    category_l2_prompt,
+    ticket_prompt,
+    response_prompt
+)
 
-app = FastAPI()
+from prompt_example import get_valid, get_category_l1, get_category_l2, get_ticket, get_response
 
 router = APIRouter()
 
-class Complaint(BaseModel):
-    text: str
-    correct_classification: str
-    
-class Complaint2(BaseModel):
-    text: str
-    base_type: str
+@router.get("/ticket_qualification")
+async def categorize_and_respond(user_input: str):
+    # Validation
+    valid_eg = get_valid()
+    validation_chain = LLMChain(llm=llm3, prompt=validation_prompt)
+    validation_result = validation_chain.run(examples = valid_eg, user_input=user_input)
 
-@router.post("/complaint_is_complete")
-async def is_complete_complaint(cmp: Complaint):
-    correct_class = cmp.correct_classification.lower()
-    valid_comp_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
-    
-    return {
-        "response": "updated record successfully"
-    }
+    if validation_result == "incomplete":
+        return {"status": "incomplete"}
 
-@router.post("/complaint_type")
-async def classify_complaint(cmp: Complaint):
-    correct_class = cmp.correct_classification.lower()
-    category_l1_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
-    
-    return {
-        "response": "updated record successfully"
-    }
-    
-@router.post("/complaint_type2")
-async def classify_complaint2(cmp: Complaint2):
-    correct_class = cmp.correct_classification.lower()
-    category_l2_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
-    
-    return {
-        "response": "updated record successfully"
-    }
-    
-    
-@router.post("/complaint_response")
-async def complaint_response(cmp: Complaint):
-    res = response_chain.run(cmp.text)
-    res = res.replace("Response:", "").strip()
-    
-    return {
-        "response": res
-    }
-    
+    # First classification
+    category_l1_eg = get_category_l1()
+    category_l1_chain = LLMChain(llm=llm2, prompt=category_l1_prompt)
+    category_l1 = category_l1_chain.run(examples=category_l1_eg, user_input=user_input)
 
-@router.post("/ticket_clf")
-async def classify_ticket(cmp: Complaint):
-    correct_class = cmp.correct_classification.lower()
-    ticket_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
-    
+    # # Second classification
+    category_lst = list(map(str.title, category_l1.split("/")))
+    categories = " or ".join(category_lst)
+    category_l2_eg = get_category_l2(category_lst)
+    category_l2_chain = LLMChain(llm=llm3, prompt=category_l2_prompt)
+    category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=user_input)
+
+    # Ticket generation
+    ticket_eg = get_ticket()
+    ticket_chain = LLMChain(llm=llm1, prompt=ticket_prompt)
+    ticket_result = ticket_chain.run(examples=ticket_eg, user_input=user_input)
+
+    # # Response generation
+    response_eg = get_response("electrical")
+    response_chain = LLMChain(llm=llm2, prompt=response_prompt)
+    response = response_chain.run(examples=response_eg, user_input=user_input)
+
     return {
-        "response": "updated record successfully"
+        "ticket_status": ticket_result,
+        "category": category_l2,
+        "response": response
     }
-    
-app.include_router(router, prefix="/sensfix", tags=['Sensfix'])
