@@ -44,7 +44,7 @@ async def categorize_and_respond(user_input: str):
     ticket_result = ticket_chain.run(examples=ticket_eg, user_input=user_input)
 
     # # Response generation
-    response_eg = get_response("electrical")
+    response_eg = get_response(category_l2)
     response_chain = LLMChain(llm=llm2, prompt=response_prompt)
     response = response_chain.run(examples=response_eg, user_input=user_input)
 

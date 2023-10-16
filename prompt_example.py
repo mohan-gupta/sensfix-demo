@@ -87,6 +87,7 @@ def get_response(category):
     data = response.find(projection={"_id":0, "cmp_id":0})
     data = data[0]
     
+    category = category.lower()
     res = convert_response_data_to_str(data[category])
     return res
 
