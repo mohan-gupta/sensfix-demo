@@ -33,7 +33,7 @@ async def is_complete_complaint(cmp: Complaint):
         "response": "updated record successfully"
     }
 
-@router.post("/complaint_type")
+@router.post("/complaint_l1_type")
 async def classify_complaint(cmp: Complaint):
     correct_class = cmp.correct_classification.lower()
     category_l1_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
@@ -42,7 +42,7 @@ async def classify_complaint(cmp: Complaint):
         "response": "updated record successfully"
     }
     
-@router.post("/complaint_type2")
+@router.post("/complaint_l2_type")
 async def classify_complaint2(cmp: Complaint2):
     correct_class = cmp.correct_classification.lower()
     category_l2_collection.update_one({"cmp_id":1}, {"$push$": {correct_class: cmp.text}}, upsert=True)
