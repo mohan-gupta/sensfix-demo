@@ -1,10 +1,12 @@
 import re
 
+#importing the database and collection names
 from dependencies import (
     db, collection_val, collection_cl1_name,
     collection_cl2_name, collection_ticket, collection_resp
     )
 
+#loading the collections
 cl1 = db.get_collection(collection_cl1_name)
 cl2 = db.get_collection(collection_cl2_name)
 ticket = db.get_collection(collection_ticket)
@@ -12,10 +14,13 @@ response = db.get_collection(collection_resp)
 valid_complaint = db.get_collection(collection_val)
 
 def convert_data_to_str(data):
+    """
+    Function to convert input data into string
+    """
     template = """
-{label}:
-{data}
-"""
+    {label}:
+    {data}
+    """
     
     prmpt_text = []
     for k,v in data.items():
@@ -27,6 +32,9 @@ def convert_data_to_str(data):
     return ("\n".join(prmpt_text))
 
 def convert_ticket_data_to_str(data):
+    """
+    Function to convert the ticket examples into string
+    """
     template = """
     {label}:
     {data}
@@ -41,6 +49,9 @@ def convert_ticket_data_to_str(data):
     return ("\n".join(prmpt_text))
 
 def convert_response_data_to_str(data):
+    """
+    Function to convert response examples into string
+    """
     template = """
     Complaint: {complaint}:
     Response: {response}
@@ -54,6 +65,9 @@ def convert_response_data_to_str(data):
     return ("\n".join(prmpt_text))
 
 def get_valid():
+    """
+    Function to fetch all the examples of complete and incomplete complaints from the valid_complaint collection
+    """
     data = valid_complaint.find(projection={"_id":0, "cmp_id":0})
     data = data[0]
 
@@ -61,12 +75,18 @@ def get_valid():
     
 
 def get_category_l1():
+    """
+    Function to fetch all the examples of category level 1 from the cl1 collection
+    """
     data = cl1.find(projection={"_id":0, "cmp_id":0})
     data = data[0]
 
     return convert_data_to_str(data)
 
 def get_category_l2(category_lst):
+    """
+    Function to fetch all the examples of category level 2 from the cl2 collection
+    """
     data = cl2.find(projection={"_id":0, "cmp_id":0})    
     data = data[0]
     
@@ -79,20 +99,20 @@ def get_category_l2(category_lst):
     return res
 
 def get_ticket():
+    """
+    Function to fetch all the examples of ticket and not ticket from the ticket collection
+    """
     data = ticket.find(projection={"_id":0, "cmp_id":0})
     data = data[0]
     return convert_ticket_data_to_str(data)
 
 def get_response(category):
+    """
+    Function to fetch all the examples of responses for a category from the response collection
+    """
     data = response.find(projection={"_id":0, "cmp_id":0})
     data = data[0]
     
     category = category.lower()
     res = convert_response_data_to_str(data[category])
     return res
-
-
-def get_category_l1_cat(category):
-    data = cl1.find(projection={"_id":0, "cmp_id":0})
-    data = data[0]
-    return data[category]
