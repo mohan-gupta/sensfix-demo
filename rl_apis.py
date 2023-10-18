@@ -69,7 +69,7 @@ async def is_complete_complaint(cmp: InpComplaint):
     """
     endpoint to update the valid complaint type(complete/incomplete)
     """
-    valid_comp_collection.update_one({"cmp_id":1}, {"$push": {cmp.correct_class: cmp.text}}, upsert=True)
+    valid_comp_collection.update_one({"cmp_id":1}, {"$push": {str(cmp.correct_class): cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
@@ -80,7 +80,7 @@ async def classify_complaint(cmp: InpComplaintL1):
     """
     endpoint to update the correct level 1 category of the complaint
     """
-    category_l1_collection.update_one({"cmp_id":1}, {"$push": {cmp.correct_class: cmp.text}}, upsert=True)
+    category_l1_collection.update_one({"cmp_id":1}, {"$push": {str(cmp.correct_class): cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
@@ -91,7 +91,7 @@ async def classify_complaint2(cmp: InpComplaintL2):
     """
     endpoint to update the correct level 2 category of the complaint
     """
-    category_l2_collection.update_one({"cmp_id":1}, {"$push": {cmp.correct_class: cmp.text}}, upsert=True)
+    category_l2_collection.update_one({"cmp_id":1}, {"$push": {str(cmp.correct_class): cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
@@ -104,7 +104,7 @@ async def complaint_response(cmp: InpResp):
     endpoint to update the correct response for complaint with the correct category
     """
     response_collection.update_one({"cmp_id":1},
-                                   {"$push": {cmp.complaint_class: [cmp.complaint_text,
+                                   {"$push": {str(cmp.complaint_class): [cmp.complaint_text,
                                                                     cmp.complaint_response]}},
                                    upsert=True)
     
@@ -118,7 +118,7 @@ async def classify_ticket(cmp: InptTicket):
     """
     endpoint to update the correct ticket type of the complaint
     """
-    ticket_collection.update_one({"cmp_id":1}, {"$push": {cmp.correct_class: cmp.text}}, upsert=True)
+    ticket_collection.update_one({"cmp_id":1}, {"$push": {str(cmp.correct_class): cmp.text}}, upsert=True)
     
     return {
         "response": "updated record successfully"
