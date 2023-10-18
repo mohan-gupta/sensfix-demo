@@ -26,14 +26,15 @@ async def categorize_and_respond(user_input: str):
     if validation_result == "incomplete":
         return {"status": "incomplete"}
 
-    # First classification
+    # Level 1 classification
     category_l1_eg = get_category_l1()
     category_l1_chain = LLMChain(llm=llm2, prompt=category_l1_prompt)
     category_l1 = category_l1_chain.run(examples=category_l1_eg, user_input=user_input)
 
-    # # Second classification
+    # Level 2 classification
     category_lst = list(map(str.title, category_l1.split("/")))
     categories = " or ".join(category_lst)
+    
     category_l2_eg = get_category_l2(category_lst)
     category_l2_chain = LLMChain(llm=llm3, prompt=category_l2_prompt)
     category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=user_input)
@@ -43,7 +44,7 @@ async def categorize_and_respond(user_input: str):
     ticket_chain = LLMChain(llm=llm1, prompt=ticket_prompt)
     ticket_result = ticket_chain.run(examples=ticket_eg, user_input=user_input)
 
-    # # Response generation
+    # Response generation
     response_eg = get_response(category_l2)
     response_chain = LLMChain(llm=llm2, prompt=response_prompt)
     response = response_chain.run(examples=response_eg, user_input=user_input)
