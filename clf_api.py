@@ -49,11 +49,13 @@ async def categorize_and_respond(user_input: str, language: str = "english", mem
     response_eg = get_response(category_l2)
 
     if language.lower() == "korean":
-        response_chain = LLMChain(llm=llm2, prompt=response_prompt_korean)
+        prompt = response_prompt_korean
     elif language.lower() == "spanish":
-        response_chain = LLMChain(llm=llm2, prompt=response_prompt_spanish)
+        prompt = response_prompt_spanish
     else:
-        response_chain = LLMChain(llm=llm2, prompt=response_prompt)
+        prompt = response_prompt
+        
+    response_chain = LLMChain(llm=llm2, prompt=prompt)
 
     response = response_chain.run(examples=response_eg, user_input=context)
 
