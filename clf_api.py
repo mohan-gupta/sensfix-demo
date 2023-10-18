@@ -16,10 +16,13 @@ router = APIRouter()
 
 @router.get("/ticket_qualification")
 async def categorize_and_respond(user_input: str, language: str = "english", memory: str = ""):
+    # Combine the user's input and memory
+    context = f"{memory}\n{user_input}" 
+    
     # Validation
     valid_eg = get_valid()
     validation_chain = LLMChain(llm=llm3, prompt=validation_prompt)
-    validation_result = validation_chain.run(examples=valid_eg, user_input=user_input)
+    validation_result = validation_chain.run(examples=valid_eg, user_input=context)
 
     if validation_result == "incomplete":
         return {"status": "incomplete"}
@@ -27,23 +30,23 @@ async def categorize_and_respond(user_input: str, language: str = "english", mem
     # Level 1 classification
     category_l1_eg = get_category_l1()
     category_l1_chain = LLMChain(llm=llm2, prompt=category_l1_prompt)
-    category_l1 = category_l1_chain.run(examples=category_l1_eg, user_input=user_input)
+    category_l1 = category_l1_chain.run(examples=category_l1_eg, user_input=context)
 
     # Level 2 classification
+    if category_l1.lower() not in ("electrical/it","cleaning/janitorial","building/infrastructure","security"):
+        return {'response': "undefined category", "llm": category_l1}
+    
     category_lst = list(map(str.title, category_l1.split("/")))
     categories = " or ".join(category_lst)
 
     category_l2_eg = get_category_l2(category_lst)
     category_l2_chain = LLMChain(llm=llm3, prompt=category_l2_prompt)
-    category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=user_input)
+    category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=context)
 
     # Ticket generation
     ticket_eg = get_ticket()
     ticket_chain = LLMChain(llm=llm1, prompt=ticket_prompt)
-    ticket_result = ticket_chain.run(examples=ticket_eg, user_input=user_input)
-
-    # Provide context for the conversation
-    context = f"{user_input}\n{memory}"  # Combine the user's input and memory
+    ticket_result = ticket_chain.run(examples=ticket_eg, user_input=context)
 
     # Response generation based on language choice
     response_eg = get_response(category_l2)
