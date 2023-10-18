@@ -55,3 +55,24 @@
    ```
 
 7. Access the API in your web browser or use a tool like `curl` or `httpie` to make HTTP requests.
+
+## API Endpoints
+
+1. `/ticket_qualification`: Categorize user complaint and generate the appropriate response<br>
+<b>inputs</b>: `user_input`: user complaint, `language`, `memory`: previous context.<br>
+<b>output</b>: `ticket_status`, `category`, and `response`
+
+2. `/complaint_is_complete`: endpoint to update the valid complaint type(complete/incomplete)<br>
+<b>inputs</b>: `text`: complaint text, `correct_class`: could be either ("complete", "incomplete").
+
+3. `/complaint_l1_type`: endpoint to update the correct level 1 category of the complaint<br>
+<b>inputs</b>: `text`: complaint text, `correct_class`: could be either ("electrical_it", "cleaning_janitorial", "building_infrastructure", "security").
+
+4. `/complaint_l2_type`: endpoint to update the correct level 2 category of the complaint<br>
+<b>inputs</b>: `text`: complaint text, `correct_class`: could be either ("electrical", "it", "cleaning", "janitorial", "building", "infrastructure", "security").
+
+5. `/complaint_response`: endpoint to update the correct response for complaint with the correct category<br>
+<b>inputs</b>: `complaint_text`: complaint text, `complaint_response`, `complaint_class`: could be either ("electrical", "it", "cleaning", "janitorial", "building", "infrastructure", "security").
+
+6. `/ticket_clf`: endpoint to update the correct ticket type of the complaint<br>
+<b>inputs</b>: `text`: complaint text, `correct_class`: could be either ("ticket", "not_ticket").
