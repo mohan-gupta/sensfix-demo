@@ -13,6 +13,24 @@ ticket = db.get_collection(collection_ticket)
 response = db.get_collection(collection_resp)
 valid_complaint = db.get_collection(collection_val)
 
+def l1_category_lst():
+    """
+    Function to get the list of level 1 categories
+    """
+    res = cl1.find(projection={"_id":0, "cmp_id":0})
+    res = res[0]
+    
+    return tuple(res.keys())
+
+def l2_category_lst():
+    """
+    Function to get the list of level 1 categories
+    """
+    res = cl2.find(projection={"_id":0, "cmp_id":0})
+    res = res[0]
+    
+    return tuple(res.keys())
+
 def convert_data_to_str(data):
     """
     Function to convert input data into string
