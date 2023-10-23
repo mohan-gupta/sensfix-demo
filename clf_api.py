@@ -1,21 +1,37 @@
 from fastapi import APIRouter
+from enum import Enum
+
 from langchain import LLMChain
+
 from dependencies import llm1, llm2, llm3
 from prompts import (
     validation_prompt,
     category_l1_prompt,
     category_l2_prompt,
     ticket_prompt,
-    response_prompt,
-    response_prompt_korean,
-    response_prompt_spanish
+    response_prompt
 )
-from prompt_example import get_valid, get_category_l1, get_category_l2, get_ticket, get_response
+from prompt_example import (
+    l1_category_lst,
+    l2_category_lst,
+    get_valid,
+    get_category_l1,
+    get_category_l2,
+    get_ticket,
+    get_response
+    )
+
+from translate import get_translation
 
 router = APIRouter()
 
+class Language(Enum):
+    en = "english"
+    es = "spanish"
+    ko = "korean"
+
 @router.get("/ticket_qualification")
-async def categorize_and_respond(user_input: str, language: str = "english", memory: str = ""):
+async def categorize_and_respond(user_input: str, language: Language, memory: str = ""):
     # Combine the user's input and memory
     context = f"{memory}\n{user_input}" 
     
@@ -33,8 +49,9 @@ async def categorize_and_respond(user_input: str, language: str = "english", mem
     category_l1 = category_l1_chain.run(examples=category_l1_eg, user_input=context)
 
     # Level 2 classification
-    if category_l1.lower() not in ("electrical/it","cleaning/janitorial","building/infrastructure","security"):
-        return {'response': "undefined category", "llm": category_l1}
+    l1_categories = l1_category_lst()
+    if category_l1.lower().replace("/", "_") not in l1_categories:
+        return {'response': "undefined level 1 category"}
     
     category_lst = list(map(str.title, category_l1.split("/")))
     categories = " or ".join(category_lst)
@@ -42,6 +59,10 @@ async def categorize_and_respond(user_input: str, language: str = "english", mem
     category_l2_eg = get_category_l2(category_lst)
     category_l2_chain = LLMChain(llm=llm3, prompt=category_l2_prompt)
     category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=context)
+    
+    l2_categories = l2_category_lst()
+    if category_l2.lower() not in l2_categories:
+        return {'response': "undefined level 2category"}
 
     # Ticket generation
     ticket_eg = get_ticket()
@@ -50,20 +71,25 @@ async def categorize_and_respond(user_input: str, language: str = "english", mem
 
     # Response generation based on language choice
     response_eg = get_response(category_l2)
-
-    if language.lower() == "korean":
-        prompt = response_prompt_korean
-    elif language.lower() == "spanish":
-        prompt = response_prompt_spanish
-    else:
-        prompt = response_prompt
-        
-    response_chain = LLMChain(llm=llm2, prompt=prompt)
-
+    response_chain = LLMChain(llm=llm2, prompt=response_prompt)
     response = response_chain.run(examples=response_eg, user_input=context)
+    
+    if language.value == "english":
+        return {
+            "ticket status": ticket_result,
+            "category": category_l2,
+            "response": response
+        }
+    
+    to_translate = ["ticket status", ticket_result, "category", category_l2, "response", response]
+    if language.value == "spanish":
+        translations = get_translation(to_translate, language.value)
+        
+    elif language.value == "korean":
+        translations = get_translation(to_translate, language.value)
 
-    return {
-        "ticket_status": ticket_result,
-        "category": category_l2,
-        "response": response
-    }
+    result = {}
+    for idx in range(1, len(translations), 2):
+        result[translations[idx-1]['translatedText']] = translations[idx]['translatedText'] 
+
+    return result

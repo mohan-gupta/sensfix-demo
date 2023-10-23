@@ -6,8 +6,6 @@ from prompt_templates import (
   category_l2_template,
   ticket_template,
   response_template,
-  spanish_response_template,
-  korean_response_template
 )
 
 validation_prompt = PromptTemplate(
@@ -34,14 +32,4 @@ ticket_prompt = PromptTemplate(
 response_prompt = PromptTemplate(
   input_variables=["examples", "user_input"],
   template=response_template
-)
-
-response_prompt_spanish = PromptTemplate(
-  input_variables=["examples", "user_input"],
-  template=spanish_response_template  
-)
-
-response_prompt_korean = PromptTemplate(
-  input_variables=["examples", "user_input"],
-  template=korean_response_template  
 )

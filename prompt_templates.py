@@ -55,28 +55,3 @@ Examples:
 Complaint: {user_input}
 Response:
 """
-
-# Spanish response template
-spanish_response_template = """
-Genera una resolución para una queja del usuario utilizando los ejemplos a continuación:
-Utilice los ejemplos en inglés y genere la respuesta en español.
-Ejemplos:
-
-{examples}
-
-Queja: {user_input}
-Respuesta:
-"""
-
-# Korean response template
-korean_response_template = """
-사용자의 불만에 대한 해결책을 아래 예시를 사용하여 생성하세요:
-영어로 된 예시를 사용하고 스페인어로 응답을 생성하세요.
-
-예시:
-
-{examples}
-
-불만: {user_input}
-응답:
-"""
