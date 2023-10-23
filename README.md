@@ -7,6 +7,7 @@
 - `prompts.py`: Creates all the Prompts(LangChain Format) by importing prompt templates from `prompt_templates.py` and examples from `prompt_examples.py`
 - `clf_api.py`: This file has the enpoint for classifying the user complaint.
 - `rl_apis.py`: This file contains the endpoints for updating the examples for the prompt.
+- `translate.py`: This file provides the translation from english to spanish and korean.
 
 ## How to Run
 
