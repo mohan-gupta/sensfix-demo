@@ -47,7 +47,9 @@
    COLLECTION_VALID=<collection name for valid complaint(complete/not complete)>
    COLLECTION_TICKET=<collection name for complaint ticket(ticket/not ticket)>
    COLLECTION_RESP=<collection name for complaint reponse>
+   TRANSLATE_KEY=<rapid api key for google translate by google cloud>
    ```
+   Translate API link: https://rapidapi.com/googlecloud/api/google-translate1
 
 6. Run the FastAPI application:
 
