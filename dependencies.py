@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from pymongo.server_api import ServerApi
 
 from langchain import OpenAI
 from dotenv import load_dotenv
@@ -12,12 +11,12 @@ load_dotenv()
 mongodb_uri = os.getenv("MONGO_DB_URI")
 
 #connecting to MongoDB client
-client = MongoClient(mongodb_uri, server_api=ServerApi('1'))
+client = MongoClient(mongodb_uri)
 
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
+    print("Pinged your deployment. You are successfully connected to MongoDB!")
 except Exception as e:
     print(e)
 

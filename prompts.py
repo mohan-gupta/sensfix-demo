@@ -1,11 +1,17 @@
 from langchain import PromptTemplate
 
 from prompt_templates import (
+  summary_template,
   validation_template,
   category_l1_template,
   category_l2_template,
   ticket_template,
   response_template,
+)
+
+summary_prompt = PromptTemplate(
+  input_variables=["context"],
+  template=summary_template
 )
 
 validation_prompt = PromptTemplate(

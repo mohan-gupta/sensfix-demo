@@ -11,32 +11,7 @@
 
 ## How to Run
 
-1. Clone this repository to your local machine:
-
-   ```bash
-   git clone https://github.com/T3xtifyai/sensifix-demo.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```bash
-   cd sensifix-demo
-   ```
-
-3. Create a virtual environment (optional but recommended):
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use: venv\Scripts\activate
-   ```
-
-4. Install the project dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. Set up your OpenAI API key by creating a `.env` file in the project directory with the following content:
+1. Set up your credentials by creating a `.env` file in the project directory with the following content:
 
    ```
    MONGO_DB_URI=<your mongo db uri>
@@ -51,13 +26,53 @@
    ```
    Translate API link: https://rapidapi.com/googlecloud/api/google-translate1
 
-6. Run the FastAPI application:
+2. Clone this repository to your local machine:
+
+   ```bash
+   git clone https://github.com/T3xtifyai/sensifix-demo.git
+   ```
+
+   and move the .env file into this folder.
+
+3. Navigate to the project directory:
+
+   ```bash
+   cd sensifix-demo
+   ```
+
+4. There are two ways you can run the app.
+
+   a. Use Docker (recommended)
+
+   first build the docker image
+   ```bash
+   docker build -t sensfix_image ./
+   ```
+
+   second run the docker image
+   ```bash
+   docker run -d --name sensfix_container -p 80:80 sensfix_image
+   ```
+   left part in port 80:80 is host port and the right part is the container port.
+
+   b. Virtual environment
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use: venv\Scripts\activate
+   ```
+
+   Install the project dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
 
    ```bash
    uvicorn main:app
    ```
 
-7. Access the API in your web browser or use a tool like `curl` or `httpie` to make HTTP requests.
+5. Access the API in your web browser or use a tool like `curl` or `httpie` to make HTTP requests.
 
 ## API Endpoints
 

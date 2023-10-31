@@ -1,3 +1,12 @@
+summary_template = """
+Summarize the given user problem to a pertinent complaint as short as possible
+without loosing the context of the problem.
+
+User Complaint: {context}
+
+Summary: 
+"""
+
 validation_template ="""
 Classify the block of text into "complete complaint" or "incomplete complaint" using the examples below. Give your response in the format below:
 
