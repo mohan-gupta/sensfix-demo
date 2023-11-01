@@ -4,7 +4,7 @@ import clf_api
 import rl_apis
 
 #initializing the app
-app = FastAPI()
+app = FastAPI(openapi_prefix="/sensfix_demo")
 
 #adding endpoints from clf_api.py
 app.include_router(clf_api.router, prefix="/sensfix", tags=['Classifier'])
