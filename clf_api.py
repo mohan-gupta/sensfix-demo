@@ -5,7 +5,7 @@ from enum import Enum
 
 from langchain import LLMChain
 
-from dependencies import llm1, llm2, llm3
+from dependencies import llm1, llm2
 from prompts import (
     summary_prompt,
     validation_prompt,
@@ -38,18 +38,18 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     # Combine the user's input and memory
     context = f"{memory}\n{user_input}"
     
-    summarize_chain = LLMChain(llm=llm3, prompt=summary_prompt)
+    summarize_chain = LLMChain(llm=llm1, prompt=summary_prompt)
     summarized_context = summarize_chain.run(context=context)
     
     # Validation
     valid_eg = get_valid()
-    validation_chain = LLMChain(llm=llm3, prompt=validation_prompt)
+    validation_chain = LLMChain(llm=llm1, prompt=validation_prompt)
     validation_result = validation_chain.run(examples=valid_eg, user_input=summarized_context)
 
     if validation_result == "incomplete":
         response_choices = [
             "The complaint seems to be incomplete, kindly provide more details.",
-            "Please prvide more details about  the problem you are facing.",
+            "Please prvide more details about the problem you are facing.",
             "Kindly provide more description about the problem you are facing."
             ]
         incomplete_response = random.choice(response_choices)
@@ -83,7 +83,7 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     categories = " or ".join(category_lst)
 
     category_l2_eg = get_category_l2(category_lst)
-    category_l2_chain = LLMChain(llm=llm3, prompt=category_l2_prompt)
+    category_l2_chain = LLMChain(llm=llm1, prompt=category_l2_prompt)
     category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=summarized_context)
     
     l2_categories = l2_category_lst()
