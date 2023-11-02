@@ -1,3 +1,5 @@
+import random
+
 from fastapi import APIRouter
 from enum import Enum
 
@@ -45,7 +47,21 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     validation_result = validation_chain.run(examples=valid_eg, user_input=summarized_context)
 
     if validation_result == "incomplete":
-        return {"status": "incomplete"}
+        response_choices = [
+            "The complaint seems to be incomplete, kindly provide more details.",
+            "Please prvide more details about  the problem you are facing.",
+            "Kindly provide more description about the problem you are facing."
+            ]
+        incomplete_response = random.choice(response_choices)
+        if language.value == "english":
+            return {
+                "status": "incomplete",
+                "response": incomplete_response
+                }
+            
+        to_translate = ["status", "incomplete", "response", incomplete_response]
+        result = get_translation(to_translate, language.value)
+        return result
 
     # Level 1 classification
     category_l1_eg = get_category_l1()
@@ -55,7 +71,13 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     # Level 2 classification
     l1_categories = l1_category_lst()
     if category_l1.lower().replace("/", "_") not in l1_categories:
-        return {'response': "undefined level 1 category"}
+        if language.value == "english":
+            return {'response': "undefined level 1 category"}
+        
+        to_translate = ["response", "undefined level 1 category"]
+        
+        result = get_translation(to_translate, language.value)
+        return result
     
     category_lst = list(map(str.title, category_l1.split("/")))
     categories = " or ".join(category_lst)
@@ -65,8 +87,15 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=summarized_context)
     
     l2_categories = l2_category_lst()
+    
     if category_l2.lower() not in l2_categories:
-        return {'response': "undefined level 2category"}
+        if language.value == "english":
+            return {'response': "undefined level 2 category"}
+        
+        to_translate = ["response", "undefined level 2 category"]
+        
+        result = get_translation(to_translate, language.value)
+        return result
 
     # Ticket generation
     ticket_eg = get_ticket()
@@ -93,14 +122,5 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         "response",response
         ]
     
-    if language.value == "spanish":
-        translations = get_translation(to_translate, language.value)
-        
-    elif language.value == "korean":
-        translations = get_translation(to_translate, language.value)
-
-    result = {}
-    for idx in range(1, len(translations), 2):
-        result[translations[idx-1]['translatedText']] = translations[idx]['translatedText'] 
-
+    result = get_translation(to_translate, language.value)
     return result

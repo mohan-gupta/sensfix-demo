@@ -2,7 +2,7 @@ import requests
 
 from dependencies import translate_key
 
-def get_translation(text, target_lang):
+def translate_text(text, target_lang):
     url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
 
     lang_map = {"korean": 'ko', "spanish": "es", "english": "en"}
@@ -23,3 +23,16 @@ def get_translation(text, target_lang):
 
     res = response.json()
     return res['data']['translations']
+
+def get_translation(to_translate, language):
+    if language == "spanish":
+        translations = translate_text(to_translate, language)
+        
+    elif language == "korean":
+        translations = translate_text(to_translate, language)
+        
+    result = {}
+    for idx in range(1, len(translations), 2):
+        result[translations[idx-1]['translatedText']] = translations[idx]['translatedText'] 
+        
+    return result
