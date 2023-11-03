@@ -35,5 +35,4 @@ collection_resp = os.getenv("COLLECTION_RESP")
 translate_key = os.getenv("TRANSLATE_KEY")
 
 # loading the llms
-llm1 = OpenAI(model_name="gpt-3.5-turbo", temperature=0.5, top_p=0.8)
-llm2 = OpenAI(model_name="gpt-3.5-turbo-0301", temperature=0.5, top_p=0.8)
+llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.5, top_p=0.8)
