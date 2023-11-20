@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-from langchain import OpenAI
+from langchain.llms import OpenAI
 from dotenv import load_dotenv
 import os
 
@@ -35,4 +35,4 @@ collection_resp = os.getenv("COLLECTION_RESP")
 translate_key = os.getenv("TRANSLATE_KEY")
 
 # loading the llms
-llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.5, top_p=0.8)
+llm = OpenAI(model_name="gpt-3.5-turbo-1106", temperature=0.5, top_p=0.8)

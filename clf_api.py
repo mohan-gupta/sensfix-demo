@@ -49,7 +49,7 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     if validation_result == "incomplete":
         response_choices = [
             "The complaint seems to be incomplete, kindly provide more details.",
-            "Please prvide more details about the problem you are facing.",
+            "Please provide more details about the problem you are facing.",
             "Kindly provide more description about the problem you are facing."
             ]
         incomplete_response = random.choice(response_choices)

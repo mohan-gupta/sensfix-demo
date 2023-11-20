@@ -1,7 +1,6 @@
 summary_template = """
 Summarize the given user problem to a pertinent complaint as short as possible
-without loosing the context of the problem. If no complaint or problem is mentioned then just write:
-"No Specific Complaint"
+without loosing the context of the problem.
 
 User Complaint: {context}
 
@@ -34,15 +33,12 @@ Category:
 category_l2_template = """
 Classify the complaint into {categories} using the examples below. 
 
-Give your response in the format below:
-
-[complaint classification]
-
 Examples:
 
 {examples}
 
 Block of Text: {user_input}
+Category:
 """
 
 ticket_template = """
