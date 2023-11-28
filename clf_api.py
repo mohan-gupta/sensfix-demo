@@ -1,4 +1,5 @@
 import random
+import logging
 
 from fastapi import APIRouter
 from enum import Enum
@@ -20,11 +21,20 @@ from prompt_example import (
     get_valid,
     get_category_l1,
     get_category_l2,
+    get_category_l2_eg,
     get_ticket,
-    get_response
+    get_response,
+    get_response_eg
     )
 
 from translate import get_translation
+
+logging.basicConfig(filename="clf_api.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 router = APIRouter()
 
@@ -32,6 +42,11 @@ class Language(Enum):
     en = "english"
     es = "spanish"
     ko = "korean"
+    
+category_l1_data = get_category_l1()
+category_l2_data = get_category_l2()
+ticket_data = get_ticket()
+response_data = get_response()
 
 @router.get("/ticket_qualification")
 async def categorize_and_respond(user_input: str, language: Language, memory: str = ""):
@@ -41,10 +56,14 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     summarize_chain = LLMChain(llm=llm, prompt=summary_prompt)
     summarized_context = summarize_chain.run(context=context)
     
+    logger.info("Complaint summarization completed")
+    
     # Validation
     valid_eg = get_valid()
     validation_chain = LLMChain(llm=llm, prompt=validation_prompt)
     validation_result = validation_chain.run(examples=valid_eg, user_input=summarized_context)
+    
+    logger.info("Complaint validation completed")
 
     if validation_result == "incomplete":
         response_choices = [
@@ -64,9 +83,10 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         return result
 
     # Level 1 classification
-    category_l1_eg = get_category_l1()
     category_l1_chain = LLMChain(llm=llm, prompt=category_l1_prompt)
-    category_l1 = category_l1_chain.run(examples=category_l1_eg, user_input=summarized_context)
+    category_l1 = category_l1_chain.run(examples=category_l1_data, user_input=summarized_context)
+    
+    logger.info("Complaint L1 classification completed")
 
     # Level 2 classification
     l1_categories = l1_category_lst()
@@ -82,9 +102,11 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     category_lst = list(map(str.title, category_l1.split("/")))
     categories = " or ".join(category_lst)
 
-    category_l2_eg = get_category_l2(category_lst)
+    category_l2_eg = get_category_l2_eg(category_l2_data, category_lst)
     category_l2_chain = LLMChain(llm=llm, prompt=category_l2_prompt)
     category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=summarized_context)
+    
+    logger.info("Complaint L2 classification completed")
     
     l2_categories = l2_category_lst()
     
@@ -98,14 +120,17 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         return result
 
     # Ticket generation
-    ticket_eg = get_ticket()
     ticket_chain = LLMChain(llm=llm, prompt=ticket_prompt)
-    ticket_result = ticket_chain.run(examples=ticket_eg, user_input=summarized_context)
+    ticket_result = ticket_chain.run(examples=ticket_data, user_input=summarized_context)
+    
+    logger.info("Complaint ticket classification completed")
 
     # Response generation based on language choice
-    response_eg = get_response(category_l2)
+    response_eg = get_response_eg(response_data, category_l2)
     response_chain = LLMChain(llm=llm, prompt=response_prompt)
     response = response_chain.run(examples=response_eg, user_input=summarized_context)
+    
+    logger.info("Complaint Response classification completed")
     
     if language.value == "english":
         return {
@@ -123,4 +148,7 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         ]
     
     result = get_translation(to_translate, language.value)
+    
+    logger.info("Result Translation completed")
+    
     return result
