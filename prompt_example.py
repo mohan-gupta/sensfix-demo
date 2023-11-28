@@ -101,17 +101,22 @@ def get_category_l1():
 
     return convert_data_to_str(data)
 
-def get_category_l2(category_lst):
+def get_category_l2():
     """
-    Function to fetch all the examples of category level 2 from the cl2 collection
-    """
+    Function to fetch all the data from the cl2 collection
+    """   
     data = cl2.find(projection={"_id":0, "cmp_id":0})    
     data = data[0]
-    
+    return data
+
+def get_category_l2_eg(l2_data, category_lst):
+    """
+    Function to fetch all the examples of a category from the cl2 collection
+    """    
     res = ""
     for cat in category_lst:
         cat = re.sub("[^a-zA-Z]*", "", cat)
-        cat_ex = data[cat.lower()]
+        cat_ex = l2_data[cat.lower()]
         res += convert_data_to_str({cat: cat_ex})
     
     return res
@@ -124,13 +129,16 @@ def get_ticket():
     data = data[0]
     return convert_ticket_data_to_str(data)
 
-def get_response(category):
-    """
-    Function to fetch all the examples of responses for a category from the response collection
-    """
+def get_response():
     data = response.find(projection={"_id":0, "cmp_id":0})
     data = data[0]
     
+    return data
+
+def get_response_eg(response_data, category):
+    """
+    Function to fetch all the examples of responses for a category from the response collection
+    """    
     category = category.lower()
-    res = convert_response_data_to_str(data[category])
+    res = convert_response_data_to_str(response_data[category])
     return res
