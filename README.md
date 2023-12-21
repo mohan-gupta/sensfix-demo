@@ -94,3 +94,10 @@
 
 6. `/ticket_clf`: endpoint to update the correct ticket type of the complaint<br>
 <b>inputs</b>: `text`: complaint text, `correct_class`: could be either ("ticket", "not_ticket").
+
+## HTTP Status Codes used
+- 200: Success
+- 430: Incomplete complaint
+- 431: Invalid Level 1 classification
+- 432: Invalid Level 2 classification
+- 544: Project API Gateway Timeout, the request is not completed within time.
