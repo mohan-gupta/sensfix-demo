@@ -1,12 +1,18 @@
 from langchain import PromptTemplate
 
 from prompt_templates import (
+  chat_template,
   summary_template,
   validation_template,
   category_l1_template,
   category_l2_template,
   ticket_template,
   response_template,
+)
+
+chat_prompt = PromptTemplate(
+  input_variables=['complaint'],
+  template=chat_template
 )
 
 summary_prompt = PromptTemplate(
