@@ -11,6 +11,8 @@
 
 ## Latest deployment instructions
 
+Commands after SSHing into remote Azure server:
+
 1. cd ssd/sensfix-demo/
 2. git pull origin main
 3. deactivate
