@@ -64,14 +64,15 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     validation_result = validation_chain.run(examples=valid_eg, user_input=summarized_context)
     
     logger.info("Complaint validation completed")
-
-    if validation_result == "incomplete":
-        response_choices = [
+    
+    response_choices = [
             "The complaint seems to be incomplete, kindly provide more details.",
             "Please provide more details about the problem you are facing.",
             "Kindly provide more description about the problem you are facing."
             ]
-        incomplete_response = random.choice(response_choices)
+    incomplete_response = random.choice(response_choices)
+
+    if validation_result == "incomplete":
         if language.value == "english":
             return {
                 "status": 430,
@@ -94,10 +95,11 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         if language.value == "english":
             return {
                 "status": 431,
-                'response': "undefined level 1 category"
+                'response': "undefined level 1 category",
+                "message": incomplete_response
                 }
         
-        to_translate = ["status", 431, "response", "undefined level 1 category"]
+        to_translate = ["status", 431, "response", "undefined level 1 category", "message", incomplete_response]
         
         result = get_translation(to_translate, language.value)
         return result
@@ -117,10 +119,11 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         if language.value == "english":
             return {
                 "status": 432,
-                'response': "undefined level 2 category"
+                'response': "undefined level 2 category",
+                "message": incomplete_response
                 }
         
-        to_translate = ["status", 432, "response", "undefined level 2 category"]
+        to_translate = ["status", 432, "response", "undefined level 2 category", "message", incomplete_response]
         
         result = get_translation(to_translate, language.value)
         return result
