@@ -24,7 +24,7 @@ def l1_category_lst():
 
 def l2_category_lst():
     """
-    Function to get the list of level 1 categories
+    Function to get the list of level 2 categories
     """
     res = cl2.find(projection={"_id":0, "cmp_id":0})
     res = res[0]
