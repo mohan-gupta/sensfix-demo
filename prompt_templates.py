@@ -1,3 +1,11 @@
+chat_template = """
+You are an expert assistant, who helps customer with their complaints.
+
+User Complaint: {complaint}
+
+Your response: 
+"""
+
 summary_template = """
 Summarize the given user problem to a pertinent complaint as short as possible
 without loosing the context of the problem.
