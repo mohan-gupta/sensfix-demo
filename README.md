@@ -28,6 +28,7 @@ Commands after SSHing into remote Azure server:
    8.4 uvicorn main:app --port 9000
    8.5 Ctrl + B. Then D.
    ```
+9. deactivate
 
 ## How to Run
 
