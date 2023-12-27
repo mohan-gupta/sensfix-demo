@@ -9,6 +9,27 @@
 - `rl_apis.py`: This file contains the endpoints for updating the examples for the prompt.
 - `translate.py`: This file provides the translation from english to spanish and korean.
 
+## Latest deployment instructions
+
+Commands after SSHing into remote Azure server:
+
+1. cd ssd/sensfix-demo/
+2. git pull origin main
+3. deactivate
+4. rm -rf venv
+5. python3.8 -m venv venv
+6. source venv/bin/activate
+7. pip install -r requirements.txt
+8. Inside tmux session:
+   ```
+   8.1 Ctrl + C
+   8.2 deactivate
+   8.3 source venv/bin/activate
+   8.4 uvicorn main:app --port 9000
+   8.5 Ctrl + B. Then D.
+   ```
+9. deactivate
+
 ## How to Run
 
 1. Set up your credentials by creating a `.env` file in the project directory with the following content:
@@ -100,4 +121,4 @@
 - 430: Incomplete complaint
 - 431: Invalid Level 1 classification
 - 432: Invalid Level 2 classification
-- 544: Project API Gateway Timeout, the request is not completed within time.
+- 504: Project API Gateway Timeout, the request is not completed within time.

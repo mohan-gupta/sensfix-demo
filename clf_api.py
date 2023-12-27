@@ -60,14 +60,14 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     chatter = LLMChain(llm=llm, prompt=chat_prompt)
     chat_resp = chatter.run(complaint=context)
     
-    logger.info("Complaint summarization completed")
+    logger.info(f"Complaint summarization completed. Summarized complaint: {chat_resp}")
     
     # Validation
     valid_eg = get_valid()
     validation_chain = LLMChain(llm=llm, prompt=validation_prompt)
     validation_result = validation_chain.run(examples=valid_eg, user_input=context)
     
-    logger.info("Complaint validation completed")
+    logger.info(f"Complaint validation completed. Validation result: {validation_result}")
 
     if validation_result == "incomplete":
         if language.value == "english":
@@ -84,7 +84,7 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     category_l1_chain = LLMChain(llm=llm, prompt=category_l1_prompt)
     category_l1 = category_l1_chain.run(examples=category_l1_data, user_input=context)
     
-    logger.info("Complaint L1 classification completed")
+    logger.info(f"Complaint L1 classification completed. L1 category: {category_l1}")
 
     # Level 2 classification
     l1_categories = l1_category_lst()
@@ -108,7 +108,7 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     category_l2_chain = LLMChain(llm=llm, prompt=category_l2_prompt)
     category_l2 = category_l2_chain.run(categories=categories, examples=category_l2_eg, user_input=context)
     
-    logger.info("Complaint L2 classification completed")
+    logger.info(f"Complaint L2 classification completed. L2 category: {category_l2}")
     
     l2_categories = l2_category_lst()
     
@@ -129,14 +129,14 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
     ticket_chain = LLMChain(llm=llm, prompt=ticket_prompt)
     ticket_result = ticket_chain.run(examples=ticket_data, user_input=context)
     
-    logger.info("Complaint ticket classification completed")
+    logger.info(f"Complaint ticket classification completed. Ticket: {ticket_result}")
 
     # Response generation based on language choice
     response_eg = get_response_eg(response_data, category_l2)
     response_chain = LLMChain(llm=llm, prompt=response_prompt)
     response = response_chain.run(examples=response_eg, user_input=context)
     
-    logger.info("Complaint Response classification completed")
+    logger.info(f"Complaint Response classification completed. Response: {response}")
     
     if language.value == "english":
         return {
