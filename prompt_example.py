@@ -115,7 +115,7 @@ def get_category_l2_eg(l2_data, category_lst):
     """    
     res = ""
     for cat in category_lst:
-        cat = re.sub("[^a-zA-Z]*", "", cat)
+        cat = re.sub("[^a-zA-Z-]*", "", cat)
         cat_ex = l2_data[cat.lower()]
         res += convert_data_to_str({cat: cat_ex})
     

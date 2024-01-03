@@ -23,18 +23,36 @@ class Complaint(Enum):
 
 class ComplaintL1(Enum):
     elec_it = "electrical_it"
+    its_tech_elec = "it-support_technician_electrician"
     clean_jan = "cleaning_janitorial"
+    plumber_main = "plumber_maintenance-engineer"
     build_infra = "building_infrastructure"
     sec = "security"
+    fr_ff = "first-responder_fire-fighter"
+    sec_g_sur_saf = "security-guard_surveillance-personnel_safety-officer"
+    hm_recep_admin = "hospitality-manager_receptionist_admin"
     
 class ComplaintL2(Enum):
     elec = "electrical"
     it = "it"
+    it_support = "it-support"
+    electrician = "electrician"
+    tech = "technician"
     clean = "cleaning"
     jan = "janitorial"
+    plumber = "plumber"
+    maint_eng = "maintenance-engineer"
     build = "building"
     infra = "infrastructure"
     sec = "security"
+    fr = "first-responder"
+    ff = "fire-fighter"
+    sec_guard = "security-guard"
+    surv_pers = "surveillance-personnel"
+    saf_off = "safety-officer"
+    hosp_mng = "hospitality-manager"
+    recep = "receptionist"
+    adm = "admin"
     
 class Ticket(Enum):
     ticket = "ticket"
