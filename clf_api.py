@@ -73,7 +73,7 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         if language.value == "english":
             return {
                 "status": 430,
-                "response": chat_resp
+                "message": chat_resp
                 }
             
         to_translate = ["status", 430, "response", chat_resp]
@@ -88,11 +88,14 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
 
     # Level 2 classification
     l1_categories = l1_category_lst()
+    category_l1 = category_l1.replace('.', '')
+    category_l1 = category_l1.replace(' ', '-')
+    
     if category_l1.lower().replace("/", "_") not in l1_categories:
         if language.value == "english":
             return {
                 "status": 431,
-                'response': "undefined level 1 category",
+                "response": "undefined level 1 category",
                 "message": chat_resp
                 }
         
@@ -116,7 +119,7 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         if language.value == "english":
             return {
                 "status": 432,
-                'response': "undefined level 2 category",
+                "response": "undefined level 2 category",
                 "message": chat_resp
                 }
         
