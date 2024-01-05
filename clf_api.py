@@ -80,14 +80,15 @@ async def categorize_and_respond(user_input: str, language: Language, memory: st
         result = get_translation(to_translate, language.value)
         return result
 
+    l1_categories = l1_category_lst()
     # Level 1 classification
+    l1_categories_str = ", ".join([category.replace('_', '/') for category in l1_categories])
     category_l1_chain = LLMChain(llm=llm, prompt=category_l1_prompt)
-    category_l1 = category_l1_chain.run(examples=category_l1_data, user_input=context)
+    category_l1 = category_l1_chain.run(categories=l1_categories_str, examples=category_l1_data, user_input=context)
     
     logger.info(f"Complaint L1 classification completed. L1 category: {category_l1}")
 
     # Level 2 classification
-    l1_categories = l1_category_lst()
     category_l1 = category_l1.replace('.', '')
     category_l1 = category_l1.replace(' ', '-')
     

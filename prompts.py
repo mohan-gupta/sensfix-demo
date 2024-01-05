@@ -28,7 +28,7 @@ validation_prompt = PromptTemplate(
 
 category_l1_prompt = PromptTemplate(
     template = category_l1_template,
-    input_variables = ["examples", "user_input"]
+    input_variables = ["categories", "examples", "user_input"]
 )
 
 category_l2_prompt = PromptTemplate(
