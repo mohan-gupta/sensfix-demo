@@ -28,7 +28,7 @@ Block of text: {user_input}
 """
 
 category_l1_template = """
-Classify the block of text into the following categories: (Electrical / IT), (Cleaning/ Janitorial),  (Building/ Infrastructure) , (Security) only using the examples below -
+Classify the block of text into the following categories: {categories} only using the examples below -
 
 Examples:
 
